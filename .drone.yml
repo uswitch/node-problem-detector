@@ -1,0 +1,27 @@
+pipeline:
+  build:
+    when:
+      event: push
+    image: plugins/docker
+    repo: registry.usw.co/cloud/node-problem-detector
+    tags:
+      - "${DRONE_BRANCH}"
+      - "${DRONE_COMMIT}"
+
+  latest-build:
+    when:
+      event: push
+      branch: master
+    image: plugins/docker
+    repo: registry.usw.co/cloud/node-problem-detector
+    tags:
+      - "latest"
+
+  latest-build:
+    when:
+      event: push
+      branch: master
+    image: plugins/docker
+    repo: registry.usw.co/cloud/node-problem-detector
+    tags:
+      - "${DRONE_TAG}"

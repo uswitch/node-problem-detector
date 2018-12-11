@@ -1,0 +1,26 @@
+{
+  "plugin": "custom",
+  "pluginConfig": {
+    "invoke_interval": "5s",
+    "timeout": "1s",
+    "max_output_length": 80,
+    "concurrency": 3
+  },
+  "source": "termination-custom-plugin-monitor",
+  "conditions": [
+    {
+      "type": "TerminationScheduled",
+      "reason": "TerminationUnScheduled",
+      "message": "termination is unscheduled"
+    }
+  ],
+  "rules": [
+    {
+      "type": "permanent",
+      "condition": "TerminationScheduled",
+      "reason": "TermincationScheduled",
+      "path": "./config/plugin/spot_termination.sh",
+      "timeout": "1s"
+    }
+  ]
+}
