@@ -1,0 +1,27 @@
+{
+  "plugin": "custom",
+  "pluginConfig": {
+    "invoke_interval": "5s",
+    "timeout": "4s",
+    "max_output_length": 80,
+    "concurrency": 1
+  },
+  "source": "uptime-custom-plugin-monitor",
+  "conditions": [
+    {
+      "type": "UptimeUnAcceptable",
+      "reason": "UptimeAcceptable",
+      "message": "uptime is acceptable"
+    }
+  ],
+  "rules": [
+    {
+      "type": "permanent",
+      "condition": "UptimeUnAcceptable",
+      "reason": "UptimeUnAcceptable",
+      "path": "./config/plugin/uptime.sh",
+      "args": ["604800"],
+      "timeout": "4s"
+    }
+  ]
+}
