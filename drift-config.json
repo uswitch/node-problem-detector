@@ -1,0 +1,26 @@
+{
+  "plugin": "custom",
+  "pluginConfig": {
+    "invoke_interval": "5s",
+    "timeout": "4s",
+    "max_output_length": 80,
+    "concurrency": 1
+  },
+  "source": "lc-drift-custom-plugin-monitor",
+  "conditions": [
+    {
+      "type": "LaunchConfigurationDrifted",
+      "reason": "LaunchConfigurationMatches",
+      "message": "launch configuration matches"
+    }
+  ],
+  "rules": [
+    {
+      "type": "permanent",
+      "condition": "LaunchConfigurationDrifted",
+      "reason": "LaunchConfigurationDrifted",
+      "path": "./config/plugin/launch_config_drift.sh",
+      "timeout": "4s"
+    }
+  ]
+}
