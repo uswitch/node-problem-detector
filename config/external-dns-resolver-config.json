@@ -1,0 +1,28 @@
+{
+  "plugin": "custom",
+  "pluginConfig": {
+    "invoke_interval": "1s",
+    "timeout": "2s",
+    "max_output_length": 80,
+    "concurrency": 1
+  },
+  "source": "external-dns-resolver-custom-plugin-monitor",
+  "conditions": [
+    {
+      "type": "ExternalDnsResolutionFailure",
+      "reason": "ExternalDnsResolutionSucceeding",
+      "message": "External DNS resolution succeeding"
+    }
+  ],
+  "rules": [
+    {
+      "type": "permanent",
+      "condition": "ExternalDnsResolutionFailure",
+      "reason": "ExternalDnsResolutionFailing",
+      "path": "./config/plugin/upstream_dns_resolver.sh",
+      "args": [
+        "iam.amazonaws.com."
+      ]
+    }
+  ]
+}

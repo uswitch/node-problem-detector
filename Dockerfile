@@ -8,6 +8,8 @@ RUN set -eux; \
     # required by plugin/launch_config_drift.sh
     awscli \
     jq \
+    # required by local_dns_resolver.sh and upstream_dns_resolver.sh plugins
+    dnsutils \
   ; \
   rm -rf /var/lib/apt/lists/*;
 
