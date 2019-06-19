@@ -1,21 +1,12 @@
 pipeline:
-  build-commit:
+  build:
     when:
       event: push
     image: plugins/docker
     repo: registry.usw.co/cloud/node-problem-detector
     tags:
-    - "${DRONE_BRANCH}"
     - "${DRONE_COMMIT}"
-
-  build-master:
-    when:
-      event: push
-      branch: master
-    image: plugins/docker
-    repo: registry.usw.co/cloud/node-problem-detector
-    tags:
-    - master
+    - "${DRONE_BRANCH}"
 
   build-tag:
     when:
