@@ -1,0 +1,28 @@
+{
+  "plugin": "custom",
+  "pluginConfig": {
+    "invoke_interval": "1s",
+    "timeout": "34s",
+    "max_output_length": 80,
+    "concurrency": 1
+  },
+  "source": "local-dns-resolver-custom-plugin-monitor",
+  "conditions": [
+    {
+      "type": "NodeLocalDnsResolutionFailure",
+      "reason": "NodeLocalDnsResolutionSucceeding",
+      "message": "node-local-dns resolution succeeding"
+    }
+  ],
+  "rules": [
+    {
+      "type": "permanent",
+      "condition": "NodeLocalDnsResolutionFailure",
+      "reason": "NodeLocalDnsResolutionFailing",
+      "path": "./config/plugin/local_dns_resolver.sh",
+      "args": [
+        "169.254.20.10"
+      ]
+    }
+  ]
+}

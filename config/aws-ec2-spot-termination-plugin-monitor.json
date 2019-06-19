@@ -10,17 +10,16 @@
   "conditions": [
     {
       "type": "TerminationScheduled",
-      "reason": "TerminationUnScheduled",
-      "message": "termination is unscheduled"
+      "reason": "TerminationIsNotScheduled",
+      "message": "Spot termination is not scheduled"
     }
   ],
   "rules": [
     {
       "type": "permanent",
       "condition": "TerminationScheduled",
-      "reason": "TermincationScheduled",
-      "path": "./config/plugin/spot_termination.sh",
-      "timeout": "4s"
+      "reason": "TerminationIsScheduled",
+      "path": "./config/plugin/spot_termination.sh"
     }
   ]
 }

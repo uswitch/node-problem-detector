@@ -1,0 +1,28 @@
+{
+  "plugin": "custom",
+  "pluginConfig": {
+    "invoke_interval": "1s",
+    "timeout": "2s",
+    "max_output_length": 80,
+    "concurrency": 1
+  },
+  "source": "kubernetes-dns-resolver-custom-plugin-monitor",
+  "conditions": [
+    {
+      "type": "KubernetesDnsResolutionFailure",
+      "reason": "KubernetesDnsResolutionSucceeding",
+      "message": "Kubernetes cluster DNS resolution succeeding"
+    }
+  ],
+  "rules": [
+    {
+      "type": "permanent",
+      "condition": "KubernetesDnsResolutionFailure",
+      "reason": "KubernetesDnsResolutionFailing",
+      "path": "./config/plugin/upstream_dns_resolver.sh",
+      "args": [
+        "kubernetes.default.svc.cluster.local."
+      ]
+    }
+  ]
+}
