@@ -1,4 +1,4 @@
-FROM k8s.gcr.io/node-problem-detector:v0.6.4
+FROM k8s.gcr.io/node-problem-detector:v0.7.0
 
 RUN set -eux; \
   apt-get update; \
