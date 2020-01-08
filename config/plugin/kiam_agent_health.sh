@@ -4,7 +4,7 @@ OK=0
 NONOK=1
 UNKNOWN=2
 
-CHECK_AGENT="$(curl -s --show-error --connect-timeout 1 http://169.254.169.254/latest/meta-data/instance-id/plz_give_me_id 2>&1)"
+CHECK_AGENT="$(curl -s --show-error --connect-timeout 1 http://169.254.169.254/latest/meta-data/ami-id 2>&1)"
 
 case $CHECK_AGENT in
   request\ blocked*)
@@ -13,7 +13,7 @@ case $CHECK_AGENT in
   exit $OK
   ;;
 
-  i-*)
+  ami-*)
   # request to meta-data API is not intercepted as instance ID is obtainable
   echo "Agent does not seem to be running"
   exit $NONOK
