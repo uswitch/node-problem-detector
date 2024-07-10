@@ -12,5 +12,5 @@ The scripts details can be found in `/config/plugin/` but ultimately, they are:
 
 
 ## Notes
-*July 2024 -* The custom `node problem detector` image is now stored in the `uswitch/node_problem_detectr` repository on Quay.
+*July 2024 -* The custom `node problem detector` image is now stored in the `uswitch/node-problem-detector` repository on Quay.
 <br>
