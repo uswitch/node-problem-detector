@@ -16,7 +16,7 @@ then
 fi
 
 instance="$(echo "${instances}" | jq '.AutoScalingInstances[0]')"
-instance_launch_config="$(echo "${instance}" | jq -r .LaunchConfigurationName)"
+instance_launch_config="$(echo "${instance}" | jq -r .LaunchTemplate.LaunchTemplateName)"
 instance_asg="$(echo "${instance}" | jq -r .AutoScalingGroupName)"
 
 asgs="$(aws autoscaling describe-auto-scaling-groups --auto-scaling-group-names ${instance_asg})"
@@ -26,7 +26,7 @@ then
     exit $UNKNOWN
 fi
 
-asg_launch_config="$(echo "${asgs}" | jq -r '.AutoScalingGroups[0].LaunchConfigurationName')"
+asg_launch_config="$(echo "${asgs}" | jq -r '.AutoScalingGroups[0].MixedInstancesPolicy.LaunchTemplate.LaunchTemplateSpecification.LaunchTemplateName')"
 
 if [ "${instance_launch_config}" = "${asg_launch_config}" ]
 then
