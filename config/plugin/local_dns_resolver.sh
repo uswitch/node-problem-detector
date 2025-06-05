@@ -30,6 +30,11 @@ case "${dig_cmd_return_code}" in
     exit "${NONOK}"
     ;;
 
+  10)
+    echo "Dig internal error, response status: ${dig_cmd_response_status}"
+    exit "${NONOK}"
+    ;;
+
   *)
     echo "Unexpected return code of dig: ${dig_cmd_return_code}"
     exit "${UNKNOWN}"
