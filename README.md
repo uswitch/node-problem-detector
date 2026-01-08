@@ -14,3 +14,19 @@ The script details can be found in `/config/plugin/` but ultimately, they are:
 *July 2024* - The custom `node problem detector` image is now stored in the `uswitch/node-problem-detector` repository on Quay.
 
 Base image tags available at: https://explore.ggcr.dev/?repo=registry.k8s.io/node-problem-detector/node-problem-detector
+
+## Releasing a New Version
+
+To publish a new tagged image to Quay, push a semantic version tag to the repository:
+
+```bash
+# Ensure you're on the latest master
+git checkout master
+git pull origin master
+
+# Create and push a tag
+git tag v1.0.0
+git push origin v1.0.0
+```
+
+This triggers the CI workflow which builds and pushes the image to `quay.io/uswitch/node-problem-detector` with both the version tag and the commit SHA.
