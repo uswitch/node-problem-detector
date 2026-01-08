@@ -1,16 +1,32 @@
 # Node Problem Detector custom scripts
 
-Adding our own scripts to https://github.com/kubernetes/node-problem-detector and sharing them in case you might find those handy for you use cases. 
+Adding our own scripts to https://github.com/kubernetes/node-problem-detector and sharing them in case you might find those handy for your use cases.
 
-
-The scripts details can be found in `/config/plugin/` but ultimately, they are:
-* `launch-config-drift`: a way to check if your instances launch template has diverged from your asg launch template
-* `spot-termination`: uses the `meta-data/spot/instance-action endpoint` to check EC2 Spot Instance interruption notice 
-* `local-dns-resolver`: checks the response status value received (if any) from the local dns resolver ip
-* `upstream-dns-resolver`: check if we receive an IPv4 address for a given A record.
-* `uptime`: every 5 seconds, checks if the information detailing how long the system has been on since its last restart is acceptable (to us the threshold being 604800 seconds) 
-
+The script details can be found in `/config/plugin/` but ultimately, they are:
+* `launch-config-drift`: a way to check if your instances launch template has diverged from your ASG launch template
+* `spot-termination`: uses the `meta-data/spot/instance-action` endpoint to check EC2 Spot Instance interruption notice
+* `local-dns-resolver`: checks the response status value received (if any) from the local DNS resolver IP
+* `upstream-dns-resolver`: check if we receive an IPv4 address for a given A record
+* `uptime`: every 5 seconds, checks if the information detailing how long the system has been on since its last restart is acceptable (to us the threshold being 604800 seconds)
 
 ## Notes
-*July 2024 -* The custom `node problem detector` image is now stored in the `uswitch/node-problem-detector` repository on Quay.
-<br>
+
+*July 2024* - The custom `node problem detector` image is now stored in the `uswitch/node-problem-detector` repository on Quay.
+
+Base image tags available at: https://explore.ggcr.dev/?repo=registry.k8s.io/node-problem-detector/node-problem-detector
+
+## Releasing a New Version
+
+To publish a new tagged image to Quay, push a semantic version tag to the repository:
+
+```bash
+# Ensure you're on the latest master
+git checkout master
+git pull origin master
+
+# Create and push a tag
+git tag v1.0.0
+git push origin v1.0.0
+```
+
+This triggers the CI workflow which builds and pushes the image to `quay.io/uswitch/node-problem-detector` with both the version tag and the commit SHA.
