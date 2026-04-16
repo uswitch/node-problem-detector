@@ -1,4 +1,4 @@
-FROM registry.k8s.io/node-problem-detector/node-problem-detector:v1.35.1
+FROM registry.k8s.io/node-problem-detector/node-problem-detector:v1.35.2
 
 RUN set -eux; \
   apt-get update; \
