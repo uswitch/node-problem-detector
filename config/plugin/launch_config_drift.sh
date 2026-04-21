@@ -22,10 +22,17 @@ if [ -z "${instance_id}" ]; then
     exit $UNKNOWN
 fi
 
-instances="$(aws autoscaling describe-auto-scaling-instances --instance-ids "${instance_id}" 2>/dev/null)"
+INSTANCE_CACHE="/tmp/npd_asg_instance_cache"
 
-if [ -z "${instances}" ] || ! echo "${instances}" | jq empty 2>/dev/null; then
-    exit $UNKNOWN
+if [ -f "$INSTANCE_CACHE" ]; then
+    instances="$(cat "$INSTANCE_CACHE")"
+else
+    instances="$(aws autoscaling describe-auto-scaling-instances --instance-ids "${instance_id}" 2>&1)"
+    if [ $? -ne 0 ]; then
+        echo "describe-auto-scaling-instances: ${instances}" >&2
+        exit $UNKNOWN
+    fi
+    echo "${instances}" > "$INSTANCE_CACHE"
 fi
 
 if [ "$(echo "${instances}" | jq '.AutoScalingInstances | length')" -eq "0" ]; then
@@ -38,9 +45,9 @@ instance_launch_template_version="$(echo "${instance}" | jq -r .LaunchTemplate.V
 instance_asg="$(echo "${instance}" | jq -r .AutoScalingGroupName)"
 
 # Get ASG's current launch template (still requires AWS API)
-asgs="$(aws autoscaling describe-auto-scaling-groups --auto-scaling-group-names "${instance_asg}" 2>/dev/null)"
-
-if [ -z "${asgs}" ] || ! echo "${asgs}" | jq empty 2>/dev/null; then
+asgs="$(aws autoscaling describe-auto-scaling-groups --auto-scaling-group-names "${instance_asg}" 2>&1)"
+if [ $? -ne 0 ]; then
+    echo "describe-auto-scaling-groups: ${asgs}" >&2
     exit $UNKNOWN
 fi
 
