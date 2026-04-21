@@ -19,10 +19,7 @@
       "type": "permanent",
       "condition": "NodeLocalDnsResolutionFailure",
       "reason": "NodeLocalDnsResolutionFailing",
-      "path": "./config/plugin/local_dns_resolver.sh",
-      "args": [
-        "kube-dns-upstream.kube-system.svc.cluster.local."
-      ]
+      "path": "./config/plugin/local_dns_resolver.sh"
     }
   ]
 }
