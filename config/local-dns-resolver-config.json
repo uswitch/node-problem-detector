@@ -19,10 +19,7 @@
       "type": "permanent",
       "condition": "NodeLocalDnsResolutionFailure",
       "reason": "NodeLocalDnsResolutionFailing",
-      "path": "./config/plugin/local_dns_resolver.sh",
-      "args": [
-        "169.254.20.10"
-      ]
+      "path": "./config/plugin/local_dns_resolver.sh"
     }
   ]
 }
