@@ -22,17 +22,20 @@ if [ -z "${instance_id}" ]; then
     exit $UNKNOWN
 fi
 
-instance_launch_template=$(curl --max-time 3 --silent --fail \
-    -H "X-aws-ec2-metadata-token: $TOKEN" \
-    "http://169.254.169.254/latest/meta-data/tags/instance/aws:ec2launchtemplate:id")
+instances="$(aws autoscaling describe-auto-scaling-instances --instance-ids "${instance_id}" 2>/dev/null)"
 
-instance_asg=$(curl --max-time 3 --silent --fail \
-    -H "X-aws-ec2-metadata-token: $TOKEN" \
-    "http://169.254.169.254/latest/meta-data/tags/instance/aws:autoscaling:groupName")
-
-if [ -z "${instance_asg}" ] || [ -z "${instance_launch_template}" ]; then
+if [ -z "${instances}" ] || ! echo "${instances}" | jq empty 2>/dev/null; then
     exit $UNKNOWN
 fi
+
+if [ "$(echo "${instances}" | jq '.AutoScalingInstances | length')" -eq "0" ]; then
+    exit $UNKNOWN
+fi
+
+instance="$(echo "${instances}" | jq '.AutoScalingInstances[0]')"
+instance_launch_template_id="$(echo "${instance}" | jq -r .LaunchTemplate.LaunchTemplateId)"
+instance_launch_template_version="$(echo "${instance}" | jq -r .LaunchTemplate.Version)"
+instance_asg="$(echo "${instance}" | jq -r .AutoScalingGroupName)"
 
 # Get ASG's current launch template (still requires AWS API)
 asgs="$(aws autoscaling describe-auto-scaling-groups --auto-scaling-group-names "${instance_asg}" 2>/dev/null)"
@@ -45,9 +48,11 @@ if [ "$(echo "${asgs}" | jq '.AutoScalingGroups | length')" -eq "0" ]; then
     exit $UNKNOWN
 fi
 
-asg_launch_template="$(echo "${asgs}" | jq -r '.AutoScalingGroups[0].MixedInstancesPolicy.LaunchTemplate.LaunchTemplateSpecification.LaunchTemplateId')"
+asg="$(echo "${asgs}" | jq '.AutoScalingGroups[0].MixedInstancesPolicy.LaunchTemplate.LaunchTemplateSpecification')"
+asg_launch_template_id="$(echo "${asg}" | jq -r '.LaunchTemplateId')"
+asg_launch_template_version="$(echo "${asg}" | jq -r '.Version')"
 
-if [ "${instance_launch_template}" = "${asg_launch_template}" ]; then
+if [ "${instance_launch_template_id}" = "${asg_launch_template_id}" ] && [ "${instance_launch_template_version}" = "${asg_launch_template_version}" ]; then
     exit $OK
 else
     exit $NONOK
